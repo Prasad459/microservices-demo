@@ -16,6 +16,9 @@ spec:
       containers:
       - name: payment
         image: weaveworksdemos/payment:0.4.3
+        env:
+         - name: ZIPKIN
+           value: http://zipkin.istio-system.svc.cluster.local:9411/api/v1/spans
         resources:
           limits:
             cpu: 100m

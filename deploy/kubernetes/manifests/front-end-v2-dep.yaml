@@ -13,7 +13,8 @@ spec:
     spec:
       containers:
       - name: front-end
-        image: quay.io/rafaeltuelho/front-end:shop-aggregator_v2
+        image: quay.io/rafaeltuelho/front-end:shop-aggregator
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 300m

@@ -38,6 +38,8 @@
             value: "shoes"
           - name: "SHOES_DB_PASSWORD"
             value: "shoes"
+          - name: TRACING_ENDPOINT
+            value: "http://jaeger-collector.istio-system.svc:14268/api/traces"
           image: "quay.io/rafaeltuelho/shoes-catalogue-application:latest"
           name: "shoes-catalogue-application"
           ports:

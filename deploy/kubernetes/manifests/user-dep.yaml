@@ -28,6 +28,8 @@ spec:
         env:
         - name: mongo
           value: user-db:27017
+        - name: ZIPKIN
+          value: http://zipkin.istio-system.svc.cluster.local:9411/api/v1/spans
         securityContext:
           runAsNonRoot: true
           runAsUser: 10001

@@ -43,6 +43,8 @@
             value: "catalogue"
           - name: SHOES_CATALOGUE_HOST
             value: "shoes-catalogue-application:8080"
+          - name: TRACING_ENDPOINT
+            value: "http://jaeger-collector.istio-system.svc:14268/api/traces"
           - name: KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
