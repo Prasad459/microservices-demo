@@ -1,0 +1,28 @@
+---
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: eebd5071f981a551f4e846fdb672110171cddd93
+      fabric8.io/iconUrl: img/icons/camel.svg
+      fabric8.io/git-branch: master
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9779"
+    labels:
+      expose: "true"
+      app: shop-catalogue-api-aggregator
+      provider: fabric8
+      version: 1.0.0-SNAPSHOT
+      group: io.github.microservices.demo
+    name: shop-catalogue-api-aggregator
+    namespace: sock-shop
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: shop-catalogue-api-aggregator
+      provider: fabric8
+      group: io.github.microservices.demo

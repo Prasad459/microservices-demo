@@ -1,0 +1,20 @@
+---
+- apiVersion: "v1"
+  kind: "Service"
+  metadata:
+    labels:
+      app: "shoes-catalogue-application"
+      version: "1.0-SNAPSHOT"
+      group: "rafaeltuelho"
+    name: "shoes-catalogue-application"
+    namespace: sock-shop
+  spec:
+    ports:
+    - name: "http"
+      port: 8080
+      targetPort: 8080
+    selector:
+      app: "shoes-catalogue-application"
+      version: "1.0-SNAPSHOT"
+      group: "rafaeltuelho"
+    type: "ClusterIP"

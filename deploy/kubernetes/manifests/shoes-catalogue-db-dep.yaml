@@ -1,0 +1,30 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: shoes-catalogue-db
+  labels:
+    name: shoes-catalogue-db
+  namespace: sock-shop
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: shoes-catalogue-db
+    spec:
+      containers:
+      - name: shoes-catalogue-db
+        image: postgres:10.5
+        env:
+          - name: POSTGRES_USER
+            value: shoes
+          - name: POSTGRES_PASSWORD
+            value: shoes
+          - name: POSTGRES_DB
+            value: shoes-db
+        ports:
+        - name: postgres
+          containerPort: 5432
+      nodeSelector:
+        beta.kubernetes.io/os: linux
