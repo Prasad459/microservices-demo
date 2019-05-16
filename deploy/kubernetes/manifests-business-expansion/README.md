@@ -12,9 +12,9 @@ To implement this expansion in our e-comerce our architects came up with a new a
 
 In this design we introduced two new services and updated the `front-end` app.
 
- 1. The `shoes-catalogue-application` is a __Native__ Java Rest service implemented using **Quarkus.io** and compiled to a native linux binary using **GraalVM.org**
- 2. The `shop-catalogue-aggregator` is a Java Rest service implemented using [Apache Camel](https://camel.apache.org/staging/) which is an Open Source Java Integration Framework. This service implements two integration patterns (EIP): [**recipient list**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/RecipientList.html) and [**aggregator**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html). Using these two patterns the service fetches and aggregates both backend catalogue service response (socks and shoes).
- 3. The updated version of `front-end` app points to the new catalogue aggregator service endpoint.
+ 1. The [**shoes-catalogue-application**](https://github.com/rafaeltuelho/shoes-catalogue-application) is a __Native__ Java Rest service implemented using **Quarkus.io** and compiled to a native linux binary using **GraalVM.org**
+ 2. The [**shop-catalogue-aggregator**](https://github.com/rafaeltuelho/shop-catalogue-aggregator) is a Java Rest service implemented using [Apache Camel](https://camel.apache.org/staging/) which is an Open Source Java Integration Framework. This service implements two integration patterns (EIP): [**recipient list**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/RecipientList.html) and [**aggregator**](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html). Using these two patterns the service fetches and aggregates both backend catalogue service response (socks and shoes).
+ 3. The updated version of [front-end](https://github.com/rafaeltuelho/front-end/tree/shop-aggregator) app points to the new catalogue aggregator service endpoint.
 
 ## New services deployment
 Given you have the original version of SockShop up & running on top of your Kubernetes cluster, deploy the two new microservices:

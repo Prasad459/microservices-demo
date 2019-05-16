@@ -4,7 +4,7 @@ See the [documentation](https://microservices-demo.github.io/deployment/kubernet
 
 ## Kubernestes manifests
 
-There are 2 sets of manifests for deploying Sock Shop on Kubernetes: one in the [manifests directory](manifests/), and complete-demo.yaml. The complete-demo.yaml is a single file manifest
+There are 2 sets of manifests for deploying Sock Shop on Kubernetes: one in the [manifests directory](manifests/), and `complete-demo.yaml`. The `complete-demo.yaml` is a single file manifest
 made by concatenating all the manifests from the manifests directory, so please regenerate it when changing files in the manifests directory.
 
 ## Tracing
@@ -62,7 +62,7 @@ kubectl edit svc weave-scope-app -n weave
 
 and change the service type to `NodePort` and assigng the value `30004` to `nodePort`:
 
-```
+```yaml
 ...
   ports:
   - name: app
@@ -73,3 +73,7 @@ and change the service type to `NodePort` and assigng the value `30004` to `node
   type: NodePort
 ...
 ```
+
+## Business expansion demo!
+
+There is an extension to this demo showing how you can expand your SockShop e-Commerce to sell Shoes! Check it out [here](manifests-business-expansion/README.md).
