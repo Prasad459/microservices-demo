@@ -1,0 +1,48 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  labels:
+    app: "shoes-catalogue-application"
+    version: "1.0-SNAPSHOT"
+    runtime: "quarkus.io"
+    group: "rafaeltuelho"
+  name: "shoes-catalogue-application"
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "shoes-catalogue-application"
+      version: "1.0-SNAPSHOT"
+      group: "rafaeltuelho"
+  template:
+    metadata:
+      labels:
+        app: "shoes-catalogue-application"
+        version: "1.0-SNAPSHOT"
+        runtime: "quarkus.io"
+        group: "rafaeltuelho"
+    spec:
+      containers:
+        - env:
+            - name: "KUBERNETES_NAMESPACE"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.namespace"
+            - name: "SHOES_DB_HOST"
+              value: "shoes-catalogue-db"
+            - name: "SHOES_DB_NAME"
+              value: "shoes-db"
+            - name: "SHOES_DB_USERNAME"
+              value: "shoes"
+            - name: "SHOES_DB_PASSWORD"
+              value: "shoes"
+            - name: TRACING_ENDPOINT
+              value: "http://jaeger-collector.jaeger.svc:14268/api/traces"
+          image: "quay.io/rafaeltuelho/shoes-catalogue-application:latest"
+          name: "shoes-catalogue-application"
+          ports:
+            - containerPort: 8080
+              name: "http"
+              protocol: "TCP"

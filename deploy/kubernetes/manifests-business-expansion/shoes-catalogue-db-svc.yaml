@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: carts
+  name: shoes-catalogue-db
   labels:
-    name: carts
+    name: shoes-catalogue-db
   namespace: sock-shop
 spec:
   ports:
     # the port that this service should serve on
-  - port: 80
-    targetPort: 80
+    - port: 5432
+      targetPort: 5432
   selector:
-    name: carts
+    name: shoes-catalogue-db

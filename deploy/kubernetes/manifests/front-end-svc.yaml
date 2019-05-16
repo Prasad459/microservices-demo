@@ -9,8 +9,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 8079
-    nodePort: 30000
+    - port: 80
+      targetPort: 8079
+      nodePort: 30000
   selector:
     name: front-end

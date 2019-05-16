@@ -1,0 +1,224 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: shoes-catalogue-db
+  labels:
+    name: shoes-catalogue-db
+  namespace: sock-shop
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: shoes-catalogue-db
+    spec:
+      containers:
+        - name: shoes-catalogue-db
+          image: postgres:10.5
+          env:
+            - name: POSTGRES_USER
+              value: shoes
+            - name: POSTGRES_PASSWORD
+              value: shoes
+            - name: POSTGRES_DB
+              value: shoes-db
+          ports:
+            - name: postgres
+              containerPort: 5432
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoes-catalogue-db
+  labels:
+    name: shoes-catalogue-db
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+    - port: 5432
+      targetPort: 5432
+  selector:
+    name: shoes-catalogue-db
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  labels:
+    app: "shoes-catalogue-application"
+    version: "1.0-SNAPSHOT"
+    runtime: "quarkus.io"
+    group: "rafaeltuelho"
+  name: "shoes-catalogue-application"
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "shoes-catalogue-application"
+      version: "1.0-SNAPSHOT"
+      group: "rafaeltuelho"
+  template:
+    metadata:
+      labels:
+        app: "shoes-catalogue-application"
+        version: "1.0-SNAPSHOT"
+        runtime: "quarkus.io"
+        group: "rafaeltuelho"
+    spec:
+      containers:
+        - env:
+            - name: "KUBERNETES_NAMESPACE"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.namespace"
+            - name: "SHOES_DB_HOST"
+              value: "shoes-catalogue-db"
+            - name: "SHOES_DB_NAME"
+              value: "shoes-db"
+            - name: "SHOES_DB_USERNAME"
+              value: "shoes"
+            - name: "SHOES_DB_PASSWORD"
+              value: "shoes"
+            - name: TRACING_ENDPOINT
+              value: "http://jaeger-collector.istio-system.svc:14268/api/traces"
+          image: "quay.io/rafaeltuelho/shoes-catalogue-application:latest"
+          name: "shoes-catalogue-application"
+          ports:
+            - containerPort: 8080
+              name: "http"
+              protocol: "TCP"
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  labels:
+    app: "shoes-catalogue-application"
+    version: "1.0-SNAPSHOT"
+    group: "rafaeltuelho"
+  name: "shoes-catalogue-application"
+  namespace: sock-shop
+spec:
+  ports:
+    - name: "http"
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: "shoes-catalogue-application"
+    version: "1.0-SNAPSHOT"
+    group: "rafaeltuelho"
+  type: "ClusterIP"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    fabric8.io/git-commit: eebd5071f981a551f4e846fdb672110171cddd93
+    fabric8.io/iconUrl: img/icons/camel.svg
+    fabric8.io/git-branch: master
+    fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=shop-catalogue-api-aggregator&var-version=1.0.0-SNAPSHOT
+  labels:
+    app: shop-catalogue-aggregator
+    provider: fabric8
+    version: 1.0.0-SNAPSHOT
+    group: io.github.microservices.demo
+  name: shop-catalogue-api-aggregator
+  namespace: sock-shop
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: shop-catalogue-aggregator
+      provider: fabric8
+      group: io.github.microservices.demo
+  template:
+    metadata:
+      annotations:
+        fabric8.io/git-commit: eebd5071f981a551f4e846fdb672110171cddd93
+        fabric8.io/iconUrl: img/icons/camel.svg
+        fabric8.io/git-branch: master
+        fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=shop-catalogue-api-aggregator&var-version=1.0.0-SNAPSHOT
+      labels:
+        app: shop-catalogue-aggregator
+        provider: fabric8
+        version: 1.0.0-SNAPSHOT
+        group: io.github.microservices.demo
+    spec:
+      containers:
+        - env:
+            - name: SPRING_APPLICATION_JSON
+              value: '{"server":{"undertow":{"io-threads":1, "worker-threads":2 }}}'
+            - name: SOCKS_CATALOGUE_HOST
+              value: "catalogue"
+            - name: SHOES_CATALOGUE_HOST
+              value: "shoes-catalogue-application:8080"
+            - name: TRACING_ENDPOINT
+              value: "http://jaeger-collector.jaeger.svc:14268/api/traces"
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          image: quay.io/rafaeltuelho/shop-catalogue-aggregator:latest
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+          name: spring-boot
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 9779
+              name: prometheus
+              protocol: TCP
+            - containerPort: 8778
+              name: jolokia
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+          resources:
+            limits:
+              cpu: "1.0"
+              memory: 256Mi
+            requests:
+              cpu: "0.2"
+              memory: 256Mi
+          securityContext:
+            privileged: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    fabric8.io/git-commit: eebd5071f981a551f4e846fdb672110171cddd93
+    fabric8.io/iconUrl: img/icons/camel.svg
+    fabric8.io/git-branch: master
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9779"
+  labels:
+    expose: "true"
+    app: shop-catalogue-aggregator
+    provider: fabric8
+    version: 1.0.0-SNAPSHOT
+    group: io.github.microservices.demo
+  name: shop-catalogue-aggregator
+  namespace: sock-shop
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: shop-catalogue-aggregator
+    provider: fabric8
+    group: io.github.microservices.demo
