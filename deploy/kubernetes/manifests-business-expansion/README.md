@@ -8,7 +8,7 @@ Leveraging the capabilities of the Microservices approach and the Kubernetes Pla
 ## New architectural design proposal
 To implement this expansion in our e-comerce our architects came up with a new architectural design:
 
-![New Architecture diagram](../../internal-docs/Arch_v2.png "Architecture")
+![New Architecture diagram](../../../internal-docs/Arch_v2.png "Architecture")
 
 In this design we introduced two new services and updated the `front-end` app.
 
