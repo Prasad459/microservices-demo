@@ -25,7 +25,36 @@ All monitoring is performed by prometheus. All services expose a `/metrics` endp
 
 The manifests for the monitoring are spread across the [manifests-monitoring](./manifests-monitoring) and [manifests-alerting](./manifests-alerting/) directories.
 
-To use them, please run `kubectl create -f <path to directory>`.
+To use them, please run:
+
+First configure the secret used by Prometheus alertmanager process to integrate with Slack.
+Configue an Webhook app in your slack account and edit the file `manifests-alerting/slack-hook-url-secret.yaml`
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: slack-hook-url
+  namespace: monitoring
+type: Opaque
+data:
+  slack-hook-url: "" #put your slack web hook url encoded in base64 here#
+```
+
+Create the monitoring Namespace:
+```
+kubectl create -f manifests-monitoring/monitoring-ns.yaml
+```
+
+Deploy Prometheus:
+```
+kubectl create -f manifests-alerting/
+```
+
+Create the Grafana resources:
+```
+kubectl create -f manifests-monitoring/
+```
 
 ### What's Included?
 

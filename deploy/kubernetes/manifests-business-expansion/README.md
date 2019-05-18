@@ -5,8 +5,15 @@ This demo show how we can incorporate a new product offering into our existing S
 
 Leveraging the capabilities of the Microservices approach and the Kubernetes Platform we can easily deploy new services and upgrade exiting ones with no service interruption.
 
+## The original architectural design
+The original version of the SockShop app is composed by 8 different services.
+
+ ![Architecture diagram](https://github.com/microservices-demo/microservices-demo.github.io/blob/HEAD/assets/Architecture.png "Architecture    ")
+
+The catalogue service (written in Go) queries a MySQL database to read the socks items and expose through a Rest API.
+
 ## New architectural design proposal
-To implement this expansion in our e-comerce our architects came up with a new architectural design:
+To implement this expansion in our e-Commerce our architects came up with a new architectural design:
 
 ![New Architecture diagram](../../../internal-docs/Arch_v2.png "Architecture")
 
@@ -20,7 +27,7 @@ In this design we introduced two new services and updated the `front-end` app.
 Given you have the original version of SockShop up & running on top of your Kubernetes cluster, deploy the two new microservices:
 
 ```
-kubectl create -f deploy/kubernetes/manifests-business-expansion/*.yaml
+kubectl create -f deploy/kubernetes/manifests-business-expansion/
 ```
 
 ## Upgrade the front-end app
@@ -60,5 +67,5 @@ kubectl rollout undo deployment front-end --to-revision #revision_number
 To remove the new services use the following command:
 
 ```
-kubectl delete -f deploy/kubernetes/manifests-business-expansion/*.yaml
+kubectl delete -f deploy/kubernetes/manifests-business-expansion/
 ```
