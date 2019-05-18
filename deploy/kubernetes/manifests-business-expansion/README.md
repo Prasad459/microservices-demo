@@ -27,7 +27,7 @@ In this design we introduced two new services and updated the `front-end` app.
 Given you have the original version of SockShop up & running on top of your Kubernetes cluster, deploy the two new microservices:
 
 ```
-kubectl create -f deploy/kubernetes/manifests-business-expansion/
+kubectl create -f deploy/kubernetes/manifests-business-expansion/deploy-all.yaml
 ```
 
 ## Upgrade the front-end app
@@ -36,7 +36,7 @@ In order to use the new Catalogue Aggregator service we need to upgrade our fron
 First scale your front-end PODs to 3
 ```
 kubectl scale deployments front-end --replicas 3 -n sock-shop && \
-kubectl get pods -l front-end -n sock-shop -w
+kubectl get pods -l name=front-end -n sock-shop -w
 ```
 
 Now change the container image version in the front-end `deployment`.
