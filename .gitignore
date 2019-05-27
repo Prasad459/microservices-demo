@@ -132,3 +132,5 @@ output-virtualbox-iso
 /graphs/__pycache__/
 /graphs/*.json
 deploy/kubernetes/manifests-alerting/slack-hook-url-secret.yaml
+
+vendor/
