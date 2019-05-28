@@ -45,6 +45,6 @@ go get github.com/google/go-jsonnet/cmd/jsonnet
 go get github.com/brancz/gojsontoyaml
 jb init
 jb install github.com/coreos/kube-prometheus/jsonnet/kube-prometheus@release-0.1
-./build.sh
+./build.sh grafana-with-custom-dashboards.jsonnet
 
 ```

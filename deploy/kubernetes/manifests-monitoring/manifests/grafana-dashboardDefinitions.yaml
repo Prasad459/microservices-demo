@@ -9781,16 +9781,6 @@ items:
   data:
     sock-shop-analytics-dashboard.json: |-
       {
-          "__inputs": [
-              {
-                  "description": "",
-                  "label": "prometheus",
-                  "name": "DS_PROMETHEUS",
-                  "pluginId": "prometheus",
-                  "pluginName": "Prometheus",
-                  "type": "datasource"
-              }
-          ],
           "annotations": {
               "list": [
 
@@ -10097,16 +10087,6 @@ items:
   data:
     sock-shop-performance-dashboard.json: |-
       {
-          "__inputs": [
-              {
-                  "description": "",
-                  "label": "prometheus",
-                  "name": "DS_PROMETHEUS",
-                  "pluginId": "prometheus",
-                  "pluginName": "Prometheus",
-                  "type": "datasource"
-              }
-          ],
           "annotations": {
               "list": [
 
@@ -11411,16 +11391,6 @@ items:
   data:
     sock-shop-resources-dashboard.json: |-
       {
-          "__inputs": [
-              {
-                  "description": "",
-                  "label": "prometheus",
-                  "name": "DS_PROMETHEUS",
-                  "pluginId": "prometheus",
-                  "pluginName": "Prometheus",
-                  "type": "datasource"
-              }
-          ],
           "annotations": {
               "list": [
 
