@@ -1077,3 +1077,13 @@ spec:
       for: 10m
       labels:
         severity: warning
+  - name: sockshop-group
+    rules:
+    - alert: Slack
+      annotations:
+        description: 'Rate of HTTP 500 errors per 5 minutes: {{ $value }}'
+        summary: High HTTP 500 error rates
+      expr: rate(request_duration_seconds_count{status_code="500"}[5m]) > 1
+      for: 5m
+      labels:
+        severity: slack

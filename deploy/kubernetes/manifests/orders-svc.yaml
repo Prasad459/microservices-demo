@@ -5,6 +5,7 @@ metadata:
   name: orders
   labels:
     name: orders
+    prometheus-scrape: yes
   namespace: sock-shop
 spec:
   ports:

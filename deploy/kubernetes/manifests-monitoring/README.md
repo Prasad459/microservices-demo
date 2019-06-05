@@ -28,7 +28,7 @@ kubectl --namespace monitoring port-forward svc/grafana 3000&
 kubectl --namespace monitoring port-forward svc/alertmanager-main 9093&
 ```
 
-Got to http://localhost:9090
+Go to http://localhost:9090
 
 ## Customizing the monitoring stack components (optional)
 If you need to customize something, edit the `grafana-with-custom-dashboards.jsonnet` file.

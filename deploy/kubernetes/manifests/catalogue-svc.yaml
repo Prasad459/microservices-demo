@@ -5,6 +5,7 @@ metadata:
   name: catalogue
   labels:
     name: catalogue
+    prometheus-scrape: yes
   namespace: sock-shop
 spec:
   ports:

@@ -5,6 +5,7 @@ metadata:
   name: rabbitmq
   labels:
     name: rabbitmq
+    prometheus-scrape: yes
   namespace: sock-shop
 spec:
   ports:

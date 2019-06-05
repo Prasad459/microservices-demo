@@ -1,6 +1,23 @@
 # Installing sock-shop on Kubernetes
 
-See the [documentation](https://microservices-demo.github.io/deployment/kubernetes-minikube.html) on how to deploy Sock Shop using Minikube.
+## Spin up a local Kubernetes Cluster using Minikube (optional)
+
+ * Certify you have Virtualbox (or other virtualization platform supported by minikube) installed.
+ * Download minikube bits and start a new cluster instance:
+
+```
+minikube start \
+ --bootstrapper=kubeadm \
+ --disk-size 20GB \
+ --memory 8046 \
+ --cpus 4 \
+ --bootstrapper=kubeadm \
+ --extra-config=kubelet.authentication-token-webhook=true \
+ --extra-config=kubelet.authorization-mode=Webhook \
+ --extra-config=scheduler.address=0.0.0.0 \
+ --extra-config=controller-manager.address=0.0.0.0
+ ```
+
 
 ## Kubernestes manifests
 
@@ -10,7 +27,6 @@ made by concatenating all the manifests from the manifests directory, so please 
 ## Tracing
 
 All services are configured to report tracing data using the Opentracing standard using jaeger/zipkin protocol.
-
 If you want to query tracing using jaeger deploy jaeger all-in-one manifest:
 
 ```
@@ -23,54 +39,34 @@ The Jaeger UI should be available through NodePort at http://$(minikube ip):3000
 
 All monitoring is performed by prometheus. All services expose a `/metrics` endpoint. All services have a Prometheus Histogram called `request_duration_seconds`, which is automatically appended to create the metrics `_count`, `_sum` and `_bucket`.
 
-The manifests for the monitoring are spread across the [manifests-monitoring](./manifests-monitoring) and [manifests-alerting](./manifests-alerting/) directories.
+The manifests for the monitoring are available in [manifests-monitoring](./manifests-monitoring) directory.
 
-To use them, please run:
-
-First configure the secret used by Prometheus alertmanager process to integrate with Slack.
-Configue an Webhook app in your slack account and edit the file `manifests-alerting/slack-hook-url-secret.yaml`
-
+Create the Monitoring Stack resources:
 ```
-apiVersion: v1
-kind: Secret
-metadata:
-  name: slack-hook-url
-  namespace: monitoring
-type: Opaque
-data:
-  slack-hook-url: "" #put your slack web hook url encoded in base64 here#
-```
-
-Create the monitoring Namespace:
-```
-kubectl create -f manifests-monitoring/monitoring-ns.yaml
-```
-
-Deploy Prometheus:
-```
-kubectl create -f manifests-alerting/
-```
-
-Create the Grafana resources:
-```
-kubectl create -f manifests-monitoring/
+kubectl create -f manifests-monitoring/manifests
+kubectl apply -f manifests-monitoring/manifests
 ```
 
 ### What's Included?
 
 * Sock-shop grafana dashboards
-* Alertmanager with 500 alert connected to slack
+* Alertmanager
 * Prometheus with config to scrape all k8s pods, connected to local alertmanager.
 
 ### Ports
 
-Grafana will be exposed on the NodePort `31300` and Prometheus is exposed on `31090`. If running on a real cluster, the easiest way to connect to these ports is by port forwarding in a ssh command:
-```
-ssh -i $KEY -L 3000:$NODE_IN_CLUSTER:31300 -L 9090:$NODE_IN_CLUSTER:31090 ubuntu@$BASTION_IP
-```
-Where all the pertinent information should be entered. Grafana and Prometheus will be available on `http://localhost:3000` or `:9090`.
+ * Prometheus is exposed on `30900`;
+ * Grafana will be exposed on the NodePort `30902`;
+ * AlertManager will be exposed on the NodePort `30903`;
 
-If on Minikube, you can connect via the VM IP address and the NodePort.
+If running on a real cluster, the easiest way to connect to these ports is by port forwarding:
+```
+kubectl port-forward svc/grafana 3000:30900 -n monitoring
+```
+
+Where all the pertinent information should be entered. In this example Grafana will be available on `http://localhost:30900`.
+
+If on Minikube, you can connect via the VM IP address and the NodePort: `http://$(minikube ip):<NodePort>`
 
 ## Wave Scope (optional)
 

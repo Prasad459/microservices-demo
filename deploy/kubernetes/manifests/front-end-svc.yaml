@@ -5,6 +5,7 @@ metadata:
   name: front-end
   labels:
     name: front-end
+    prometheus-scrape: yes
   namespace: sock-shop
 spec:
   type: LoadBalancer

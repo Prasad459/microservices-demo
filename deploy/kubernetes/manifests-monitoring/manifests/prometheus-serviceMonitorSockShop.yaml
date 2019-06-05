@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: sock-shop
+  name: sock-shop
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+  - interval: 30s
+    port: http-metrics
+  - interval: 30s
+    port: exporter
+  - interval: 30s
+    targetPort: 80
+  - interval: 30s
+    targetPort: 8079
+  jobLabel: sock-shop
+  namespaceSelector:
+    matchNames:
+    - sock-shop
+  selector:
+    matchLabels:
+      prometheus-scrap: k8s
